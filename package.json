@@ -1,0 +1,22 @@
+{
+  "name": "logher",
+  "version": "1.0.0",
+  "description": "Get hold of your application logs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kiku19/logher.git"
+  },
+  "keywords": [
+    "log"
+  ],
+  "author": "kishore",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kiku19/logher/issues"
+  },
+  "homepage": "https://github.com/kiku19/logher#readme"
+}
