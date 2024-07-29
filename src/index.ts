@@ -41,12 +41,12 @@ class Main{
     private overwriteConsoleFunctions(){
         const originalLog = console.log
         console.log = (args)=>{
-            fs.writeFileSync(this.rootPath,`${new Date()}: `,...args)
+            fs.writeFileSync(this.rootPath,`${new Date()}: `,args)
             originalLog(...args)
         }
         const originalError = console.error
         console.error = (args)=>{
-            fs.writeFileSync(this.rootPath,`${new Date()}: `,...args)
+            fs.writeFileSync(this.rootPath,`${new Date()}: `,args)
             originalError(...args)
         }
     }
