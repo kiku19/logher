@@ -15,14 +15,14 @@ class Main{
     constructor(directoryPath?:string,serviceName?:string){
         directoryPath && (this.directoryPath = directoryPath);
         serviceName && (this.serviceName = serviceName);
-        this.rootPath = path.join(this.directoryPath,'logher',this.serviceName,this.todaysDate(),this.processId)
+        this.rootPath = path.join(this.directoryPath,'logher',this.serviceName,this.todaysDate())
         this.initialize()
     }
 
     private initialize(){
         try{
-            if(fs.existsSync(this.rootPath))
-                fs.mkdirSync(this.rootPath)
+            if(!fs.existsSync(this.rootPath))
+                fs.mkdirSync(this.rootPath,{recursive:true})
             this.overwriteConsoleFunctions()
         }
         catch(error){
@@ -41,13 +41,13 @@ class Main{
     private overwriteConsoleFunctions(){
         const originalLog = console.log
         console.log = (args)=>{
-            fs.writeFileSync(this.rootPath,`${new Date()}: `,args)
-            originalLog(...args)
+            fs.writeFileSync(path.join(this.rootPath,`${this.processId}.txt`),`${new Date()}: ${args}`)
+            originalLog(args)
         }
         const originalError = console.error
         console.error = (args)=>{
-            fs.writeFileSync(this.rootPath,`${new Date()}: `,args)
-            originalError(...args)
+            fs.writeFileSync(path.join(this.rootPath,`${this.processId}.txt`),`${new Date()}: ${args}`)
+            originalError(args)
         }
     }
 }
