@@ -1,7 +1,3 @@
-console.log("Application starting")
-console.log("Environment:",process.env.NODE_ENV)
-console.log(process.env.PM2_ID)
-
 import path from 'path'
 import { config } from 'dotenv'
 config({path:path.join('env',`.env.${process.env.NODE_ENV}`)})
