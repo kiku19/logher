@@ -1,12 +1,29 @@
 {
-  "name": "logher",
+  "name": "logker",
   "version": "1.0.0",
   "description": "Get hold of your application logs",
-  "main": "index.js",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.mjs",
+  "types": "./dist/types/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "type": "module",
+  "exports": {
+    ".": {
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.mjs"
+    }
+  },
   "scripts": {
     "start:local": "tsc && nodemon",
-    "start:dev":"tsc && pm2 start ecosystem.config.cjs"
+    "start:dev": "tsc && pm2 start ecosystem.config.cjs",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json && npm run rename:esm",
+    "build": "npm run build:cjs && npm run build:esm",
+    "clean": "rimraf dist",
+    "rename:esm": "bash ./scripts/fix-mjs.sh",
+    "prepack": "npm run clean && npm run build"
   },
   "repository": {
     "type": "git",
@@ -29,6 +46,7 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "rimraf": "^6.0.1"
   }
 }

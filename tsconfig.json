@@ -5,7 +5,8 @@
     "moduleResolution": "NodeNext",
     "sourceMap": true,
     "strict": true,
-    "outDir": "dist"
+    "outDir": "dist/esm"
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exculde":["node_modules","dist"]
 }
