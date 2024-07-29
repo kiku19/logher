@@ -5,6 +5,9 @@ console.log(process.env.PM2_ID)
 import path from 'path'
 import { config } from 'dotenv'
 config({path:path.join('env',`.env.${process.env.NODE_ENV}`)})
+import fs from 'fs'
+
+console.log(process.env.NODE_ENV)
 
 class Main{
 
@@ -12,20 +15,27 @@ class Main{
 
     private serviceName:string = new Date().getTime().toString()
 
-    private pm2Id = process.env.PM2_ID
+    private processId = process.env.PM2_ID??process.env.POD_NAME??this.serviceName
 
-    private containerId = process.env.POD_NAME
+    private rootPath:string = ''
 
     //SER DIRECTORY PATH AND SERVICE NAME
     constructor(directoryPath?:string,serviceName?:string){
         directoryPath && (this.directoryPath = directoryPath);
         serviceName && (this.serviceName = serviceName);
+        this.rootPath = path.join(this.directoryPath,'logher',this.serviceName,this.todaysDate(),this.processId)
         this.initialize()
     }
 
     private initialize(){
-        const rootPath = path.join(this.directoryPath,'logher',this.serviceName,this.todaysDate())
-
+        try{
+            if(fs.existsSync(this.rootPath))
+                fs.mkdirSync(this.rootPath)
+            this.overwriteConsoleFunctions()
+        }
+        catch(error){
+            throw error
+        }
     }
 
     private todaysDate(){
@@ -36,4 +46,18 @@ class Main{
         return date
     }
 
+    private overwriteConsoleFunctions(){
+        const originalLog = console.log
+        console.log = (args)=>{
+            fs.writeFileSync(this.rootPath,`${new Date()}: `,...args)
+            originalLog(...args)
+        }
+        const originalError = console.error
+        console.error = (args)=>{
+            fs.writeFileSync(this.rootPath,`${new Date()}: `,...args)
+            originalError(...args)
+        }
+    }
 }
+
+export default Main
