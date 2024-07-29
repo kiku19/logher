@@ -1,9 +1,5 @@
 import path from 'path'
-import { config } from 'dotenv'
-config({path:path.join('env',`.env.${process.env.NODE_ENV}`)})
 import fs from 'fs'
-
-console.log(process.env.NODE_ENV)
 
 class Main{
 
