@@ -3,7 +3,7 @@ import fs from 'fs'
 
 class Main{
 
-    private directoryPath:string = process.cwd()
+    private directoryPath:string = process.cwd() 
 
     private serviceName:string = new Date().getTime().toString()
 
