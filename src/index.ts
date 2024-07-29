@@ -15,7 +15,7 @@ class Main{
     constructor(directoryPath?:string,serviceName?:string){
         directoryPath && (this.directoryPath = directoryPath);
         serviceName && (this.serviceName = serviceName);
-        this.rootPath = path.join(this.directoryPath,'logher',this.serviceName,this.todaysDate())
+        this.rootPath = path.join(this.directoryPath,'logher',this.serviceName)
         this.initialize()
     }
 
@@ -41,11 +41,17 @@ class Main{
     private overwriteConsoleFunctions(){
         const originalLog = console.log
         console.log = (args)=>{
-            fs.appendFileSync(path.join(this.rootPath,`${this.processId}.txt`),`${new Date()}: ${args}\n`)
+            const currentDatePath = path.join(this.rootPath,this.todaysDate())
+            if(!fs.existsSync(currentDatePath))
+                fs.mkdirSync(currentDatePath)
+            fs.appendFileSync(path.join(currentDatePath,`${this.processId}.txt`),`${new Date()}: ${args}\n`)
             originalLog(args)
         }
         const originalError = console.error
         console.error = (args)=>{
+            const currentDatePath = path.join(this.rootPath,this.todaysDate())
+            if(!fs.existsSync(currentDatePath))
+                fs.mkdirSync(currentDatePath)
             fs.appendFileSync(path.join(this.rootPath,`${this.processId}.txt`),`${new Date()}: ${args}\n`)
             originalError(args)
         }
