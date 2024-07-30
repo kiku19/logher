@@ -1,19 +1,28 @@
 import path from "path";
 import fs from "fs";
 
+export type EnvWithPath = {
+  [env:string]:string
+}
 class Main {
   private directoryPath: string = process.cwd();
 
   private serviceName: string = new Date().getTime().toString();
 
   private processId =
-    process.env.PM2_ID ?? process.env.POD_NAME ?? this.serviceName;
+    process.env.PM2_ID ?? process.env.POD_NAME
 
   private rootPath: string = "";
 
   //SER DIRECTORY PATH AND SERVICE NAME
-  constructor(directoryPath?: string, serviceName?: string) {
-    directoryPath && (this.directoryPath = directoryPath);
+  constructor(directoryPath?: string | EnvWithPath,env='NODE_ENV',serviceName?: string) {
+    if(typeof directoryPath != 'string' && directoryPath){
+      const environmentVar = process.env[env]
+      if(!environmentVar) throw 'specified environmental variable not found'
+      this.directoryPath = directoryPath[environmentVar]
+    }
+    else directoryPath && (this.directoryPath = directoryPath);
+    
     serviceName && (this.serviceName = serviceName);
     this.rootPath = path.join(this.directoryPath, "logker", this.serviceName);
     this.initialize();
