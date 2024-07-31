@@ -16,16 +16,20 @@ class Main {
 
   //SER DIRECTORY PATH AND SERVICE NAME
   constructor(directoryPath?: string | EnvWithPath,env='NODE_ENV',serviceName?: string) {
-    if(typeof directoryPath != 'string' && directoryPath){
-      const environmentVar = process.env[env]
-      if(!environmentVar) throw 'specified environmental variable not found'
-      this.directoryPath = directoryPath[environmentVar]
+    const environmentVar = process.env[env]
+
+    if(environmentVar){
+      if(typeof directoryPath != 'string' && directoryPath){
+        if(!environmentVar) throw 'specified environmental variable not found'
+        this.directoryPath = directoryPath[environmentVar]
+      }
+      else directoryPath && (this.directoryPath = directoryPath);
+      
+      serviceName && (this.serviceName = serviceName);
+      this.rootPath = path.join(this.directoryPath, "logker", this.serviceName);
+      this.initialize();
     }
-    else directoryPath && (this.directoryPath = directoryPath);
-    
-    serviceName && (this.serviceName = serviceName);
-    this.rootPath = path.join(this.directoryPath, "logker", this.serviceName);
-    this.initialize();
+    else console.log("environmental variable not found")
   }
 
   private initialize() {
